@@ -18,6 +18,8 @@ jobs:
         with:
           path: ${{ github.workspace }}/artifacts/x264
           key: ${{ runner.os }}-x264-${{env.X264_GIT_TAG}}
+      - name: Setup NASM
+        uses: ilammy/setup-nasm@v1.4.0
       - name: Configure x264
         working-directory: ./x264
         run: |
@@ -51,15 +53,17 @@ jobs:
         with:
           path: ${{ github.workspace }}/artifacts/x265
           key: ${{ runner.os }}-x265-${{env.X265_GIT_TAG}}
+      - name: Setup NASM
+        uses: ilammy/setup-nasm@v1.4.0
       - name: Configure x265
         working-directory: ./x265
         run: |
           cmake
+          ./source
           -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/artifacts/x265
           -DENABLE_SHARED=OFF
           -DENABLE_CLI=OFF
           -DENABLE_PIC=ON
-          source
       - name: Make
         working-directory: ./x265
         run: make
@@ -84,9 +88,11 @@ jobs:
         with:
           path: ${{ github.workspace }}/artifacts/opus
           key: ${{ runner.os }}-opus-${{env.OPUS_GIT_TAG}}
-      - name: setup autoconf automake libtool
+      - name: Setup autoconf automake libtool
         run: |
           brew install autoconf automake libtool
+      - name: Setup NASM
+        uses: ilammy/setup-nasm@v1.4.0
       - name: Autogen opus
         working-directory: ./opus
         run: |
@@ -137,6 +143,8 @@ jobs:
         working-directory: ./ffmpeg
         run: |
           echo "GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - name: Setup NASM
+        uses: ilammy/setup-nasm@v1.4.0
       - name: Set PKGCONFIG Env
         working-directory: ./ffmpeg
         run: |
