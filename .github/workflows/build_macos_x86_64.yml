@@ -23,7 +23,7 @@ jobs:
         if: steps.cache-x264.outputs.cache-hit != 'true'
         uses: ilammy/setup-nasm@v1.4.0
       - name: Configure x264
-        if: cache-x264.outputs.cache-hit != 'true'
+        if: steps.cache-x264.outputs.cache-hit != 'true'
         working-directory: ./x264
         run: |
           ./configure \
