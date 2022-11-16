@@ -26,6 +26,7 @@ jobs:
           ./configure \
           --prefix=${{github.workspace}}/artifacts/x264 \
           --enable-pic \
+          --enable-static \
           --enable-strip \
           --disable-cli \
           --disable-opencl
