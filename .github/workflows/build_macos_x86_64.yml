@@ -23,11 +23,11 @@ jobs:
       - name: Configure x264
         working-directory: ./x264
         run: |
-          ./configure
-          --prefix=${{github.workspace}}/artifacts/x264
-          --enable-pic
-          --enable-strip
-          --disable-cli
+          ./configure \
+          --prefix=${{github.workspace}}/artifacts/x264 \
+          --enable-pic \
+          --enable-strip \
+          --disable-cli \
           --disable-opencl
       - name: Make
         working-directory: ./x264
@@ -58,11 +58,11 @@ jobs:
       - name: Configure x265
         working-directory: ./x265
         run: |
-          cmake
-          ./source
-          -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/artifacts/x265
-          -DENABLE_SHARED=OFF
-          -DENABLE_CLI=OFF
+          cmake \
+          ./source \
+          -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/artifacts/x265 \
+          -DENABLE_SHARED=OFF \
+          -DENABLE_CLI=OFF \
           -DENABLE_PIC=ON
       - name: Make
         working-directory: ./x265
@@ -100,12 +100,12 @@ jobs:
       - name: Configure opus
         working-directory: ./opus
         run: |
-          ./configure
-          --host=x86_64
-          --prefix=${{github.workspace}}/artifacts/opus
-          --enable-static
-          --disable-shared
-          --disable-doc
+          ./configure \
+          --host=x86_64 \
+          --prefix=${{github.workspace}}/artifacts/opus \
+          --enable-static \
+          --disable-shared \
+          --disable-doc \
           --disable-extra-programs
       - name: Make
         working-directory: ./x265
@@ -152,45 +152,45 @@ jobs:
       - name: Configure FFmpeg
         working-directory: ./ffmpeg
         run: |
-          ./configure
-          --prefix=${{github.workspace}}/artifacts/ffmpeg
-          --disable-all
-          --disable-autodetect
-          --arch=x86_64
-          --pkg-config-flags=--static
-          --enable-stripping
-          --disable-debug
-          --enable-pic
-          --enable-hardcoded-tables
-          --enable-gpl
-          --enable-version3
-          --enable-avdevice
-          --enable-avcodec
-          --enable-avformat
-          --disable-doc
-          --disable-htmlpages
-          --disable-manpages
-          --disable-podpages
-          --disable-txtpages
-          --disable-network
-          --enable-libx264
-          --enable-libx265
-          --enalbe-libopus
-          --enable-videotoolbox
-          --enable-audiotoolbox
-          --enable-encoder=libx264
-          --enable-encoder=libx265
-          --enable-encoder=libopus
-          --enable-decoder=h264
-          --enable-decoder=hevc
-          --enable-decoder=libopus
-          --enable-encoder=h264_videotoolbox
-          --enable-encoder=hevc_videotoolbox
-          --enable-hwaccel=h264_videotoolbox
-          --enable-hwaccel=hevc_videotoolbox
-          --enable-hwaccel=vp9_videotoolbox
-          --enable-parser=h264
-          --enable-parser=hevc
+          ./configure \
+          --prefix=${{github.workspace}}/artifacts/ffmpeg \
+          --disable-all \
+          --disable-autodetect \
+          --arch=x86_64 \
+          --pkg-config-flags=--static \
+          --enable-stripping \
+          --disable-debug \
+          --enable-pic \
+          --enable-hardcoded-tables \
+          --enable-gpl \
+          --enable-version3 \
+          --enable-avdevice \
+          --enable-avcodec \
+          --enable-avformat \
+          --disable-doc \
+          --disable-htmlpages \
+          --disable-manpages \
+          --disable-podpages \
+          --disable-txtpages \
+          --disable-network \
+          --enable-libx264 \
+          --enable-libx265 \
+          --enalbe-libopus \
+          --enable-videotoolbox \
+          --enable-audiotoolbox \
+          --enable-encoder=libx264 \
+          --enable-encoder=libx265 \
+          --enable-encoder=libopus \
+          --enable-decoder=h264 \
+          --enable-decoder=hevc \
+          --enable-decoder=libopus \
+          --enable-encoder=h264_videotoolbox \
+          --enable-encoder=hevc_videotoolbox \
+          --enable-hwaccel=h264_videotoolbox \
+          --enable-hwaccel=hevc_videotoolbox \
+          --enable-hwaccel=vp9_videotoolbox \
+          --enable-parser=h264 \
+          --enable-parser=hevc \
       - name: Make
         working-directory: ./ffmpeg
         run: make
