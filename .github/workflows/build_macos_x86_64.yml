@@ -170,6 +170,10 @@ jobs:
         working-directory: ./ffmpeg
         run: |
           echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${{github.workspace}}/artifacts/x264/pkgconfig:${{github.workspace}}/artifacts/x265/pkgconfig:${{github.workspace}}/artifacts/opus/pkgconfig" >> $GITHUB_ENV
+      - name: List artifacts
+        working-directory: ./artifacts
+        run: |
+          ls -R |awk '{print i$0}' i=`pwd`'/'
       - name: Configure FFmpeg
         working-directory: ./ffmpeg
         run: |
