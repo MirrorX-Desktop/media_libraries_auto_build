@@ -226,9 +226,8 @@ jobs:
         working-directory: ./ffmpeg
         run: make clean
       - name: Zip Assets
-        uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r artifacts_macos_x86_64.zip ${{github.workspace}}/artifacts
+        run: |
+          7z a artifacts_macos_x86_64.zip ${{github.workspace}}/artifacts
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
