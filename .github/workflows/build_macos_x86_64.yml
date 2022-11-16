@@ -176,7 +176,7 @@ jobs:
           --disable-network \
           --enable-libx264 \
           --enable-libx265 \
-          --enalbe-libopus \
+          --enable-libopus \
           --enable-videotoolbox \
           --enable-audiotoolbox \
           --enable-encoder=libx264 \
