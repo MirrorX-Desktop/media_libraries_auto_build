@@ -108,13 +108,13 @@ jobs:
           --disable-doc \
           --disable-extra-programs
       - name: Make
-        working-directory: ./x265
+        working-directory: ./opus
         run: make
       - name: Make Install
-        working-directory: ./x265
+        working-directory: ./opus
         run: make install
       - name: Make Clean
-        working-directory: ./x265
+        working-directory: ./opus
         run: make clean
 
   build-and-publish-ffmpeg:
