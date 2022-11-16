@@ -15,12 +15,15 @@ jobs:
         run: |
           echo "X264_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - uses: actions/cache@v3
+        id: cache-x264
         with:
           path: ${{ github.workspace }}/artifacts/x264
           key: ${{ runner.os }}-x264-${{env.X264_GIT_TAG}}
       - name: Setup NASM
+        if: steps.cache-x264.outputs.cache-hit != 'true'
         uses: ilammy/setup-nasm@v1.4.0
       - name: Configure x264
+        if: cache-x264.outputs.cache-hit != 'true'
         working-directory: ./x264
         run: |
           ./configure \
@@ -31,12 +34,15 @@ jobs:
           --disable-cli \
           --disable-opencl
       - name: Make
+        if: steps.cache-x264.outputs.cache-hit != 'true'
         working-directory: ./x264
         run: make
       - name: Make Install
+        if: steps.cache-x264.outputs.cache-hit != 'true'
         working-directory: ./x264
         run: make install
       - name: Make Clean
+        if: steps.cache-x264.outputs.cache-hit != 'true'
         working-directory: ./x264
         run: make clean
   
@@ -51,12 +57,15 @@ jobs:
         run: |
           echo "X265_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - uses: actions/cache@v3
+        id: cache-x265
         with:
           path: ${{ github.workspace }}/artifacts/x265
           key: ${{ runner.os }}-x265-${{env.X265_GIT_TAG}}
       - name: Setup NASM
+        if: steps.cache-x265.outputs.cache-hit != 'true'
         uses: ilammy/setup-nasm@v1.4.0
       - name: Configure x265
+        if: steps.cache-x265.outputs.cache-hit != 'true'
         working-directory: ./x265
         run: |
           cmake \
@@ -66,12 +75,15 @@ jobs:
           -DENABLE_CLI=OFF \
           -DENABLE_PIC=ON
       - name: Make
+        if: steps.cache-x265.outputs.cache-hit != 'true'
         working-directory: ./x265
         run: make
       - name: Make Install
+        if: steps.cache-x265.outputs.cache-hit != 'true'
         working-directory: ./x265
         run: make install
       - name: Make Clean
+        if: steps.cache-x265.outputs.cache-hit != 'true'
         working-directory: ./x265
         run: make clean
         
@@ -86,19 +98,24 @@ jobs:
         run: |
           echo "OPUS_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - uses: actions/cache@v3
+        id: cache-opus
         with:
           path: ${{ github.workspace }}/artifacts/opus
           key: ${{ runner.os }}-opus-${{env.OPUS_GIT_TAG}}
       - name: Setup autoconf automake libtool
+        if: steps.cache-opus.outputs.cache-hit != 'true'
         run: |
           brew install autoconf automake libtool
       - name: Setup NASM
+        if: steps.cache-opus.outputs.cache-hit != 'true'
         uses: ilammy/setup-nasm@v1.4.0
       - name: Autogen opus
+        if: steps.cache-opus.outputs.cache-hit != 'true'
         working-directory: ./opus
         run: |
           ./autogen.sh
       - name: Configure opus
+        if: steps.cache-opus.outputs.cache-hit != 'true'
         working-directory: ./opus
         run: |
           ./configure \
@@ -109,12 +126,15 @@ jobs:
           --disable-doc \
           --disable-extra-programs
       - name: Make
+        if: steps.cache-opus.outputs.cache-hit != 'true'
         working-directory: ./opus
         run: make
       - name: Make Install
+        if: steps.cache-opus.outputs.cache-hit != 'true'
         working-directory: ./opus
         run: make install
       - name: Make Clean
+        if: steps.cache-opus.outputs.cache-hit != 'true'
         working-directory: ./opus
         run: make clean
 
