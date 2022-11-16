@@ -169,7 +169,7 @@ jobs:
       - name: Set PKGCONFIG Env
         working-directory: ./ffmpeg
         run: |
-          echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${{github.workspace}}/artifacts/x264/pkgconfig:${{github.workspace}}/artifacts/x265/pkgconfig:${{github.workspace}}/artifacts/opus/pkgconfig" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${{github.workspace}}/artifacts/x264/lib/pkgconfig:${{github.workspace}}/artifacts/x265/lib/pkgconfig:${{github.workspace}}/artifacts/opus/lib/pkgconfig" >> $GITHUB_ENV
       - name: List artifacts
         working-directory: ./artifacts
         run: |
