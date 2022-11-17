@@ -227,13 +227,11 @@ jobs:
         run: make clean
       - name: Zip Assets
         run: |
-          7z a artifacts_macos_x86_64.zip ${{github.workspace}}/artifacts
+          7z a artifacts_macos_x64.zip ${{github.workspace}}/artifacts/*
       - name: Release
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: ncipollo/release-action@v1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: false
-          title: "Release"
-          files: |
-            artifacts_macos_x86_64.zip
+          artifacts: "artifacts_macos_x64.zip"
+          tag: "latest"
+          allowUpdates: true
+      
