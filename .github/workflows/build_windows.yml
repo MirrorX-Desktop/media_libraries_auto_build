@@ -11,7 +11,7 @@ jobs:
     # clone x264
     - name: Clone x264 Repository
       run: |
-        git clone -b 0.164.r3101 --depsth=1 https://github.com/ShiftMediaProject/x264.git ./source/x264
+        git clone -b 0.164.r3101 --depth=1 https://github.com/ShiftMediaProject/x264.git ./source/x264
     - name: Get Git Tag
       working-directory: ./source/x264
       run: |
