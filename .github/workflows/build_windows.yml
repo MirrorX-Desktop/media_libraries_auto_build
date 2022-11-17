@@ -113,7 +113,8 @@ jobs:
     # compile x264
     - name: Upgrade x264 project
       run: |
-        Start-Process -Wait -FilePath "devenv.exe" -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\x264\SMP\libx264.vcxproj", "-upgrade"
+        $devenv = & vswhere.exe '-property' productPath
+        Start-Process -Wait -FilePath $devenv -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\x264\SMP\libx264.vcxproj", "-upgrade"
     - name: Build x264
       run: |
         Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\x264\SMP\libx264.vcxproj"
@@ -121,7 +122,8 @@ jobs:
     # compile x265
     - name: Upgrade x265 project
       run: |
-        Start-Process -Wait -FilePath "devenv.exe" -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\x265\SMP\libx265.vcxproj", "-upgrade"
+        $devenv = & vswhere.exe '-property' productPath
+        Start-Process -Wait -FilePath $devenv -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\x265\SMP\libx265.vcxproj", "-upgrade"
     - name: Build x265
       run: |
         Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\x265\SMP\libx265.vcxproj"
@@ -129,7 +131,8 @@ jobs:
     # compile opus
     - name: Upgrade opus project
       run: |
-        Start-Process -Wait -FilePath "devenv.exe" -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\opus\SMP\libopus.vcxproj", "-upgrade"
+        $devenv = & vswhere.exe '-property' productPath
+        Start-Process -Wait -FilePath $devenv -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\opus\SMP\libopus.vcxproj", "-upgrade"
     - name: Build opus
       run: |
         Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\opus\SMP\libopus.vcxproj"
@@ -137,7 +140,8 @@ jobs:
     # compile mfx
     - name: Upgrade mfx project
       run: |
-        Start-Process -Wait -FilePath "devenv.exe" -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\mfx_dispatch\SMP\libmfx.vcxproj", "-upgrade"
+        $devenv = & vswhere.exe '-property' productPath
+        Start-Process -Wait -FilePath $devenv -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\mfx_dispatch\SMP\libmfx.vcxproj", "-upgrade"
     - name: Build mfx
       run: |
         Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\mfx_dispatch\SMP\libmfx.vcxproj"
