@@ -84,13 +84,12 @@ jobs:
         ./install_script.bat
         
     # setup ffvs-project-generator
-    - name: Setup FFVS-Project-Generator
+    - name: Download FFVS-Project-Generator
       uses: robinraju/release-downloader@v1.6
       with:
         repository: "ShiftMediaProject/FFVS-Project-Generator"
         tag: "1.11.5"
         fileName: "FFVS-Project-Generator_1.11.5_x64.zip"
-        out-file-path: "FFVS-Project-Generator"
     - name: Unzip FFVS-Project-Generator
       run: |
         7z x FFVS-Project-Generator_1.11.5_x64.zip
