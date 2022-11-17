@@ -117,8 +117,8 @@ jobs:
         Start-Process -Wait -FilePath $devenv -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\x264\SMP\libx264.vcxproj", "-upgrade"
     - name: Build x264
       run: |
-        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\x264\SMP\libx264.vcxproj"
-
+        $proc = Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\x264\SMP\libx264.vcxproj"
+        Wait-Process -InputObject $proc
     # compile x265
     - name: Upgrade x265 project
       run: |
@@ -126,8 +126,8 @@ jobs:
         Start-Process -Wait -FilePath $devenv -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\x265\SMP\libx265.vcxproj", "-upgrade"
     - name: Build x265
       run: |
-        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\x265\SMP\libx265.vcxproj"
-
+        $proc = Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\x265\SMP\libx265.vcxproj"
+        Wait-Process -InputObject $proc
     # compile opus
     - name: Upgrade opus project
       run: |
@@ -135,8 +135,8 @@ jobs:
         Start-Process -Wait -FilePath $devenv -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\opus\SMP\libopus.vcxproj", "-upgrade"
     - name: Build opus
       run: |
-        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\opus\SMP\libopus.vcxproj"
-
+        $proc = Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\opus\SMP\libopus.vcxproj"
+        Wait-Process -InputObject $proc
     # compile mfx
     - name: Upgrade mfx project
       run: |
@@ -144,8 +144,8 @@ jobs:
         Start-Process -Wait -FilePath $devenv -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\mfx_dispatch\SMP\libmfx.vcxproj", "-upgrade"
     - name: Build mfx
       run: |
-        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\mfx_dispatch\SMP\libmfx.vcxproj"
-
+        $proc = Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\mfx_dispatch\SMP\libmfx.vcxproj"
+        Wait-Process -InputObject $proc
     - name: Generate FFmpeg VS Project
       working-directory: ./source
       run: |
@@ -190,15 +190,13 @@ jobs:
         "--enable-hwaccel=h264_d3d11va", `
         "--enable-hwaccel=h264_d3d11va2", `
         "--enable-hwaccel=h264_dxva2" `
-        
     - name: Compile FFmpeg
       run: |
-        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\ffmpeg\SMP\ffmpeg.sln"
-      
+        $proc = Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\ffmpeg\SMP\ffmpeg.sln"
+        Wait-Process -InputObject $proc
     - name: Zip Assets
       run: |
         7z a artifacts_windows_x64.zip ${{github.workspace}}/msvc
-        
     - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
