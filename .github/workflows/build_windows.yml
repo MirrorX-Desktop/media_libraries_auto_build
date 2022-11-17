@@ -93,6 +93,8 @@ jobs:
     - name: Unzip FFVS-Project-Generator
       run: |
         7z x FFVS-Project-Generator_1.11.5_x64.zip
+    - name: list
+      run: Get-ChildItem
     - name: Copy to source
       run: |
         Copy-Item -Path "${{github.workspace}}\FFVS-Project-Generator_1.11.5_x64\project_generate.exe" -Destination "${{github.workspace}}\source\project_generate.exe" -Force
