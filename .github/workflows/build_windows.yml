@@ -196,7 +196,7 @@ jobs:
         Wait-Process -InputObject $proc
     - name: Zip Assets
       run: |
-        7z a artifacts_windows_x64.zip ${{github.workspace}}/msvc
+        7z a artifacts_windows_x64.zip ${{github.workspace}}\msvc\*
     - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
