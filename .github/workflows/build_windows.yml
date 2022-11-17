@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  build-x264:
+  build:
     runs-on: windows-latest
     steps:
     # clone x264
@@ -47,7 +47,7 @@ jobs:
     # clone mfx_dispatch
     - name: Clone mfx Repository
       run: |
-        git clone -b v1.35.r89 https://github.com/ShiftMediaProject/mfx_dispatch.git ./source/mfx_dispatch
+        git clone -b 1.35.r89 https://github.com/ShiftMediaProject/mfx_dispatch.git ./source/mfx_dispatch
     - name: Get Git Tag
       working-directory: ./source/mfx_dispatch
       run: |
