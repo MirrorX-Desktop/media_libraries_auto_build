@@ -198,11 +198,8 @@ jobs:
       run: |
         7z a artifacts_windows_x64.zip ${{github.workspace}}\msvc\*
     - name: Release
-      uses: "marvinpinto/action-automatic-releases@latest"
+      uses: ncipollo/release-action@v1
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: false
-        title: "Release"
-        files: |
-          artifacts_windows_x64.zip
+        artifacts: "artifacts_windows_x64.zip"
+        tag: "latest"
+        allowUpdates: true
