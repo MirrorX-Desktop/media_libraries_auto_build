@@ -1,0 +1,207 @@
+name: build_windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build-x264:
+    runs-on: windows-latest
+    steps:
+    # clone x264
+    - name: Clone x264 Repository
+      run: |
+        git clone -b 0.164.r3101 --depsth=1 https://github.com/ShiftMediaProject/x264.git ./source/x264
+    - name: Get Git Tag
+      working-directory: ./source/x264
+      run: |
+        echo "X264_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+    
+    # clone x265
+    - name: Clone x265 Repository
+      run: |
+        git clone -b 3.5 https://github.com/ShiftMediaProject/x265.git ./source/x265
+    - name: Get Git Tag
+      working-directory: ./source/x265
+      run: |
+        echo "X265_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+    
+    # clone opus
+    - name: Clone opus Repository
+      run: |
+        git clone -b v1.3.1-1 https://github.com/ShiftMediaProject/opus.git ./source/opus
+    - name: Get Git Tag
+      working-directory: ./source/opus
+      run: |
+        echo "OPUS_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+    
+    # clone amf
+    - name: Clone amf Repository
+      run: |
+        git clone -b v1.4.26 https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git ./source/amf
+    - name: Get Git Tag
+      working-directory: ./source/amf
+      run: |
+        echo "AMF_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        
+    # clone mfx_dispatch
+    - name: Clone mfx Repository
+      run: |
+        git clone -b v1.35.r89 https://github.com/ShiftMediaProject/mfx_dispatch.git ./source/mfx_dispatch
+    - name: Get Git Tag
+      working-directory: ./source/mfx_dispatch
+      run: |
+        echo "MFX_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+    
+    # clone nv-codec-headers
+    - name: Clone nvcodec Repository
+      run: |
+        git clone -b n11.1.5.2 https://github.com/FFmpeg/nv-codec-headers.git ./source/nv-codec-headers
+    - name: Get Git Tag
+      working-directory: ./source/nv-codec-headers
+      run: |
+        echo "NV_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        
+    # clone ffmpeg
+    - name: Clone FFmpeg Repository
+      run: |
+        git clone -b release/5.1 --depth=1 https://git.ffmpeg.org/ffmpeg.git ./source/ffmpeg
+    - name: Get Git Tag
+      working-directory: ./source/ffmpeg
+      run: |
+        echo "NV_GIT_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+    
+    # clone and install vsnasm
+    - name: Clone vsnasm Repository
+      run: |
+        git clone -b 0.8 https://github.com/ShiftMediaProject/VSNASM.git ./vsnasm
+    - name: Setup Env
+      run: |
+        echo "CI=Local" >> $GITHUB_ENV
+    - name: Setup vsnasm
+      working-directory: ./vsnasm
+      run: |
+        ./install_script.bat
+        
+    # setup ffvs-project-generator
+    - name: Setup FFVS-Project-Generator
+      uses: robinraju/release-downloader@v1.6
+      with:
+        repository: "ShiftMediaProject/FFVS-Project-Generator"
+        tag: "1.11.5"
+        fileName: "FFVS-Project-Generator_1.11.5_x64.zip"
+        out-file-path: "FFVS-Project-Generator"
+    - name: Unzip FFVS-Project-Generator
+      run: |
+        7z x FFVS-Project-Generator_1.11.5_x64.zip
+    - name: Copy to source
+      run: |
+        Copy-Item -Path "${{github.workspace}}\FFVS-Project-Generator_1.11.5_x64\project_generate.exe" -Destination "${{github.workspace}}\source\project_generate.exe" -Force
+
+    # copy nvcodec headers to source\include
+    - name: Copy nvcodec headers
+      run: |
+        Copy-Item -Path "${{github.workspace}}\source\nv-codec-headers\include" -Recurse -Destination "${{github.workspace}}\msvc\include" -Force
+
+    # copy nvcodec headers to source\include
+    - name: Copy amf headers
+      run: |
+        Copy-Item -Path "${{github.workspace}}\source\AMF\amf\public\include" -Recurse -Destination "${{github.workspace}}\msvc\include\AMF" -Force
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+
+    # compile x264
+    - name: Upgrade x264 project
+      run: |
+        Start-Process -Wait -FilePath "devenv.exe" -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\x264\SMP\libx264.vcxproj", "-upgrade"
+    - name: Build x264
+      run: |
+        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\x264\SMP\libx264.vcxproj"
+
+    # compile x265
+    - name: Upgrade x265 project
+      run: |
+        Start-Process -Wait -FilePath "devenv.exe" -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\x265\SMP\libx265.vcxproj", "-upgrade"
+    - name: Build x265
+      run: |
+        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\x265\SMP\libx265.vcxproj"
+
+    # compile opus
+    - name: Upgrade opus project
+      run: |
+        Start-Process -Wait -FilePath "devenv.exe" -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\opus\SMP\libopus.vcxproj", "-upgrade"
+    - name: Build opus
+      run: |
+        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\opus\SMP\libopus.vcxproj"
+
+    # compile mfx
+    - name: Upgrade mfx project
+      run: |
+        Start-Process -Wait -FilePath "devenv.exe" -PassThru -NoNewWindow -ArgumentList "${{github.workspace}}\source\mfx_dispatch\SMP\libmfx.vcxproj", "-upgrade"
+    - name: Build mfx
+      run: |
+        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\mfx_dispatch\SMP\libmfx.vcxproj"
+
+    - name: Generate FFmpeg VS Project
+      working-directory: ./source
+      run: |
+        Start-Process -Wait -FilePath ".\project_generate.exe" -PassThru -NoNewWindow -ArgumentList `
+        "--disable-all", `
+        "--disable-autodetect", `
+        "--enable-dxva2", `
+        "--enable-d3d11va", `
+        "--enable-cuvid", `
+        "--enable-amf", `
+        "--enable-libmfx", `
+        "--enable-ffnvcodec", `
+        "--enable-w32threads", `
+        "--enable-gpl", `
+        "--enable-version3", `
+        "--enable-avutil", `
+        "--enable-avdevice", `
+        "--enable-avcodec", `
+        "--enable-avformat", `
+        "--enable-libx264", `
+        "--enable-libx265", `
+        "--enable-libopus", `
+        "--enable-encoder=libx264", `
+        "--enable-encoder=libx265", `
+        "--enable-encoder=libopus", `
+        "--enable-decoder=h264", `
+        "--enable-decoder=hevc", `
+        "--enable-decoder=libopus", `
+        "--disable-doc", `
+        "--disable-htmlpages", `
+        "--disable-manpages", `
+        "--disable-podpages", `
+        "--disable-txtpages", `
+        "--disable-network", `
+        "--enable-nvenc", `
+        "--enable-nvdec", `
+        "--enable-encoder=h264_amf", `
+        "--enable-encoder=h264_qsv", `
+        "--enable-encoder=h264_nvenc", `
+        "--enable-decoder=h264_cuvid", `
+        "--enable-decoder=h264_qsv", `
+        "--enable-hwaccel=h264_d3d11va", `
+        "--enable-hwaccel=h264_d3d11va2", `
+        "--enable-hwaccel=h264_dxva2" `
+        
+    - name: Compile FFmpeg
+      run: |
+        Start-Process -FilePath "MSBuild.exe" -PassThru -NoNewWindow -ArgumentList "-t:ReBuild", "-nodeReuse:false", "-p:Configuration=Release", "-p:Platform=x64", "-p:PlatformToolset=v143", "${{github.workspace}}\source\ffmpeg\SMP\ffmpeg.sln"
+      
+    - name: Zip Assets
+      run: |
+        7z a artifacts_windows_x64.zip ${{github.workspace}}/msvc
+        
+    - name: Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: false
+        title: "Release"
+        files: |
+          artifacts_windows_x64.zip
