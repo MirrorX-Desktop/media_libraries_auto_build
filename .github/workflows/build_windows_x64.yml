@@ -165,6 +165,7 @@ jobs:
         "--enable-avdevice", `
         "--enable-avcodec", `
         "--enable-avformat", `
+        "--enable-swresample", `
         "--enable-libx264", `
         "--enable-libx265", `
         "--enable-libopus", `
