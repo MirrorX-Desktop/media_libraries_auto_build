@@ -192,6 +192,7 @@ jobs:
           --enable-avdevice \
           --enable-avcodec \
           --enable-avformat \
+          --enable-swresample \
           --disable-doc \
           --disable-htmlpages \
           --disable-manpages \
